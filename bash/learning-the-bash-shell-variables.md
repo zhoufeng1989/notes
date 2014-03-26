@@ -8,7 +8,7 @@
 
 0  脚本名称或shell名称   
 1, 2..    脚本的参数  
-#  脚本参数个数，从$1开始算起   
+\#  脚本参数个数，从$1开始算起   
 $  当前shell的pid  
 ?  上一条shell的退出状态
 
@@ -56,11 +56,11 @@ $@ is arg1 arg2 arg3
 
 +   测试变量
 
-![](../images/test-variable.jpg)
+![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/test-variable.jpg)
 
 +   模式匹配
 
-![](../images/pattern-matched.jpg)
+![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/pattern-matched.jpg)
 
 模式匹配主要用于处理路径上面
 
@@ -85,8 +85,8 @@ declare命令
 默认显示所有已定义的变量
 
 常用选项
-![](../images/declare.jpg)
-</figure>
+
+![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/declare.jpg)
 
 **算数操作**
 
