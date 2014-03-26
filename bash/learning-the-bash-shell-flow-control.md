@@ -14,11 +14,11 @@ if 检查该关键字后的command list中最后一条command的退出状态(exi
 
 +   文件比较
 
-![](https://raw.github.com/zhoufeng1989/notes/bash/master/images/file-cmp.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/master/bash/images/file-cmp.jpg)
 
 +   整数比较
 
-![](https://raw.github.com/zhoufeng1989/notes/bash/master/images/number-cmp.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/master/bash/images/number-cmp.jpg)
 
 
 可以用()将测试条件分组，但是()必须转义 \\(\\).  -a 和 -o 表示 && 和 ||，但是必须在[ ]中才能使用。
