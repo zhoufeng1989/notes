@@ -4,21 +4,21 @@ if 检查该关键字后的command list中最后一条command的退出状态(exi
 
 退出状态是 if 语句唯一能识别的信息，[ condition ] 语句会返回exit status ，告知if 语句condition 是 true/false。注意[后与]前的空格
 
-[]中condition的分类:
+**[]中condition的分类**
 
 +   字符串比较
 
-![](https://raw.github.com/zhoufeng1989/notes/images/string-cmp.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/bash/images/string-cmp.jpg)
 
 注：string要加双引号，否则若string为空时，会出现 [ -n ]，从而报错，加上""后为[ -n "" ],it's OK!
 
 +   文件比较
 
-![](https://raw.github.com/zhoufeng1989/notes/images/file-cmp.jpg">)
+![](https://raw.github.com/zhoufeng1989/notes/bash/images/file-cmp.jpg)
 
 +   整数比较
 
-![](https://raw.github.com/zhoufeng1989/notes/images/number-cmp.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/bash/images/number-cmp.jpg)
 
 
 可以用()将测试条件分组，但是()必须转义 \\(\\).  -a 和 -o 表示 && 和 ||，但是必须在[ ]中才能使用。
