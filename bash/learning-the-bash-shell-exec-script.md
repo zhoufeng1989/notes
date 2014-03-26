@@ -32,7 +32,6 @@
 
 +   enable命令   
 disable built_ins，能够执行同名的脚本。             
-
 -n built_ins #disable built_ins            
 built_ins   #enable 
 

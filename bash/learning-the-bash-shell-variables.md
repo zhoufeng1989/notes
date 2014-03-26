@@ -56,11 +56,11 @@ $@ is arg1 arg2 arg3
 
 +   测试变量
 
-![]("images/test-variable.jpg")
+![](../images/test-variable.jpg)
 
 +   模式匹配
 
-![]("images/pattern-matched.jpg")
+![](../images/pattern-matched.jpg)
 
 模式匹配主要用于处理路径上面
 
@@ -85,8 +85,7 @@ declare命令
 默认显示所有已定义的变量
 
 常用选项
-<figure>
-<a href="/images/declare.jpg"><img src="/images/declare.jpg"></a>
+![](../images/declare.jpg)
 </figure>
 
 **算数操作**
