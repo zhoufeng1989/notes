@@ -63,7 +63,7 @@ some tips
 +   data descriptors always override instance dictionaries.
 +   non-data descriptors may be overridden by instance dictionaries. 
 
-**properity**
+**properity**  
 Calling property() is a succinct way of building a data descriptor that triggers function calls upon access to an attribute. Its signature is:
 
 ```
