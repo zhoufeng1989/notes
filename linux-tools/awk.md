@@ -209,22 +209,28 @@ END{print "maxuid="maxuid, "max_record="max_record}' \
 
  - while
 
-    while(condition)
-    
-        action
+```
+while(condition)
+
+    action
+```
 
  - do while
+    
+```
+do
 
-    do
-    
     action
-    
-    while(condition)
+
+while(condition)
+```
 
  - for
 
-    for(initialization;condition;increment/decrement) 
-         actions
+```
+for(initialization;condition;increment/decrement) 
+     actions
+```
 
  - contine and break
 
@@ -350,9 +356,8 @@ awk 'BEGIN{print systime()}'
 after getline is executed, the awk script sets the value of NF, NR, FNR, and $0 built-in variables appropriately.
 
 example: alternate output between two files
-<figure>
-<a href="/images/awk-getline.png"><img src="/images/awk-getline.png"></a>
-</figure>
+
+![](https://raw.github.com/zhoufeng1989/notes/images/awk-getline.png)
 
 
 ```
