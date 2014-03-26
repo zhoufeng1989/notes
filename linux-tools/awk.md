@@ -168,41 +168,47 @@ END{print "maxuid="maxuid, "max_record="max_record}' \
 
  - if
 
-    if (condition-expression)
-    
-        action
+```
+if (condition-expression)
 
-    if (condition-expression)
-    
-    {
-    
-        action1;
-    
-        action2;
-    
-    }
+    action
+
+if (condition-expression)
+
+{
+
+    action1;
+
+    action2;
+
+}
+```
 
  - if else
 
-    if (condition-expression)
-    
-    {
-    
-        ....
-    
-    }
-    
-      else
-    
-    {
-    
+```
+if (condition-expression)
+
+{
+
     ....
-    
-    }
+
+}
+
+  else
+
+{
+
+....
+
+}
+```
 
  - ternary operator:
 
-    conditional-expression ? action1 : action2 ; 
+```
+conditional-expression ? action1 : action2 ; 
+```
 
 
 **loops**
@@ -357,7 +363,7 @@ after getline is executed, the awk script sets the value of NF, NR, FNR, and $0 
 
 example: alternate output between two files
 
-![](https://raw.github.com/zhoufeng1989/notes/images/awk-getline.png)
+![](https://raw.github.com/zhoufeng1989/notes/master/linux-tools/images/awk-getline.png)
 
 
 ```
