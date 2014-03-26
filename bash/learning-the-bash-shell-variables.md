@@ -56,11 +56,11 @@ $@ is arg1 arg2 arg3
 
 +   测试变量
 
-![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/test-variable.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/master/bash/images/test-variable.jpg)
 
 +   模式匹配
 
-![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/pattern-matched.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/master/bash/images/pattern-matched.jpg)
 
 模式匹配主要用于处理路径上面
 
@@ -86,7 +86,7 @@ declare命令
 
 常用选项
 
-![](https://github.com/zhoufeng1989/notes/blob/master/bash/images/declare.jpg)
+![](https://raw.github.com/zhoufeng1989/notes/master/bash/images/declare.jpg)
 
 **算数操作**
 
