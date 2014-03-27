@@ -110,3 +110,86 @@ class Property(object):
     def deleter(self, fdel):
         return type(self)(self.fget, self.fset, fdel, self.__doc__)
 ```
+
+**method and function**
+
+function defined in a class is a non-data descriptor,reference a function in a class becomes a method
+
+```
+class MyClass(object):
+    def func():
+        pass
+
+x = MyClass()
+
+# bound method
+x.func
+
+# unbound method
+MyClass.func
+
+# function
+MyClass.__dict__['func']
+
+# function with __get__ method
+# method-wrapper '__get__' of function object
+MyClass.__dict__['func'].__get__
+```
+
+**static method**
+
+Static methods is also a non-data descriptor, return the underlying function without changes.   
+Calling either c.f or C.f is the equivalent of a direct lookup into object.__getattribute__(c, "f") or object.__getattribute__(C, "f").    
+As a result, the function becomes identically accessible from either an object or a class. 
+
+useful when the function does not depends on a particular dataset.
+
+pure python version of static method
+
+```
+class StaticMethod(object):
+ "Emulate PyStaticMethod_Type() in Objects/funcobject.c"
+
+ def __init__(self, f):
+      self.f = f
+
+ def __get__(self, obj, objtype=None):
+      return self.f
+```
+
+**class method**
+
+also a non-data descriptor, prepend the class reference to the argument list before calling the function.
+
+This behavior is useful whenever the function only needs to have a class reference and does not care about any underlying data. One use for classmethods is to create alternate class constructors.
+
+dict.fromkeys() pure python version
+
+```
+class Dict(object):
+    def fromkeys(klass, iterable, value=None):
+        "Emulate dict_fromkeys() in Objects/dictobject.c"
+        d = klass()
+        for key in iterable:
+            d[key] = value
+        return d
+    fromkeys = classmethod(fromkeys)
+```
+
+pure python version of class method
+
+
+```
+class ClassMethod(object):
+     "Emulate PyClassMethod_Type() in Objects/funcobject.c"
+
+     def __init__(self, f):
+          self.f = f
+
+     def __get__(self, obj, klass=None):
+          if klass is None:
+               klass = type(obj)
+          def newfunc(*args):
+               return self.f(klass, *args)
+          return newfunc
+```
