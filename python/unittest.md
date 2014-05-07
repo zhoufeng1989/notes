@@ -1,4 +1,4 @@
-看了一篇写Unit Test的教程，比较不错，写了段代码作为笔记
+看了一篇写 Unit Test 的[教程](http://www.drdobbs.com/testing/unit-testing-with-python/240165163)，比较不错，写了段代码作为笔记
 
 ```
 import unittest
