@@ -37,3 +37,12 @@ A **filesystem** is a collection of files organized within an hierarchical names
 
         +   LZ4 is better than gzip
         +   LZ4 compression times approach raw I/O times
+
+### Relational databases
+Relational database: a set of relations
+
+Two parts to a Relation:
+
++   Schema: specifies name of relation, plus each column’s name and type
++   Instance: the actual data at a given time   
+    rows = cardinality, fields = degree
