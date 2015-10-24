@@ -26,4 +26,3 @@ the cost of trying out a new type of data analysis from downloading, deploying,
 and learning a new software project to upgrading Spark.   
 Finally, one of the largest advantages of tight integration is the ability to
 build applications that seamlessly combine different processing models.
-
