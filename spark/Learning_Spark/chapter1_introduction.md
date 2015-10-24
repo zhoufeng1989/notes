@@ -30,5 +30,5 @@ and learning a new software project to upgrading Spark.
 +   Finally, one of the largest advantages of tight integration is the ability to
 build applications that seamlessly combine different processing models.
 
-spark stack
-
+![Spark stack]
+(chapter1_spark_stack.png)
