@@ -3,38 +3,19 @@ An RDD in Spark is simply an immutable distributed collection of objects. Each
 RDD is split into multiple partitions, which may be computed on different nodes
 of the cluster. 
 
-### transformations and actions  
-Once created, RDDs offers two types of operations: **transformations** and
-**actions**. **Transformations** construct a new RDD from a previous one.
-**Actions**, on the other hand, compute a result based on an RDD, and either
-return it to the driver program or save it to an external storage system(e.g.,
-HDFS).
-
-#### lazy or not   
-Transformations and actions are different because of the way Spark computes
-RDDs. Although you can define new RDDs any time, Spark computes them only in
-a lazy fashion—that is, the first time they are used in an action.
-
-### persist rdd  
-Finally, Spark’s RDDs are by default recomputed each time you run an action on
-them. If you would like to reuse an RDD in multiple actions, you can ask Spark
-to persist it using ```RDD.persist()```.  After computing it the first time,
-Spark will store the RDD contents in memory (partitioned across the machines in
-your cluster), and reuse them in future actions. 
-
+### Transformations and Actions  
+RDDs offers two types of operations: **transformations** and **actions**. 
 
 ## Creating Rdds   
 Spark provides two ways to create RDDS: loading an external dataset and
 parallelizing a collection in your driver program.   
-
-    
 parallelizing a collection is not widely used since it requires that you have
 your entire dataset in memory on one machine.
 
 
 ## Rdd operations
 
-### transformations  
+### Transformations  
 Transformations are operations on RDDs that return a new RDD.
 transformed RDDs are computed lazily, only when you use them in an action.  
 Many transformations are **element-wise**; that is, they work on one element at
@@ -48,7 +29,7 @@ Rather than thinking of an RDD as containing specific data, it is best to think
 of each RDD as consisting of instructions on how to compute the data that we
 build up through transformations. Loading data into an RDD is lazily evaluated
 in the same way transformations are. So, when we call sc.textFile(), the data
-is not loaded until it is nec‐ essary. As with transformations, the operation
+is not loaded until it is necessary. As with transformations, the operation
 (in this case, reading the data) can occur multiple times.  
 Spark uses lazy evaluation to reduce the number of passes it has to take over
 our data by grouping operations together. In systems like Hadoop MapReduce,
@@ -57,7 +38,7 @@ operations to minimize the number of MapReduce passes. **In Spark, there is no
 substantial benefit to writing a single complex map instead of chaining together
 many simple operations**. 
 
-### actions  
+### Actions  
 They are the operations that return a final value to the driver program or write
 data to an external storage system. Actions force the evaluation of the
 transformations required for the RDD they were called on, since they need to
