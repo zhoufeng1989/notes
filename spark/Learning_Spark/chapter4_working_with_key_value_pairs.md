@@ -32,3 +32,8 @@ Sometimes, we want to change the partitioning of an RDD outside the context of g
 For those cases, Spark provides the ```repartition()``` function, which shuffles the data across the network to create a new set of partitions. 
 Keep in mind that repartitioning your data is a fairly expensive operation. 
 Spark also has an optimized version of repartition() called ```coalesce()``` that allows avoiding data movement, but only if you are decreasing the number of RDD partitions. 
+
+### Transformations on two Rdds  
++ join、leftOuterJoin、rightOuterJoin   
++ cogroup  
++ union、subtractByKey  
