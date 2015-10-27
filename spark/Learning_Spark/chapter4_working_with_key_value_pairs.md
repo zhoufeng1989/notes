@@ -37,3 +37,5 @@ Spark also has an optimized version of repartition() called ```coalesce()``` tha
 + join、leftOuterJoin、rightOuterJoin   
 + cogroup  
 + union、subtractByKey  
+
+## Data Partitioning(Advanced)(TODO)
