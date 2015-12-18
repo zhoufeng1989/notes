@@ -79,3 +79,39 @@ As a result, we always need to apply proper synchronization to ensure that the
 writes by one thread are visible to another thread.
 Writes by any thread executing the synchronized statement on an x object are
 **not only atomic, but also visible to threads that execute synchronized on x**.
+
+## Monitors and synchronization   
+
+A synchronization mechanism that enforces access limits on a shared resource is
+called a **lock**. Locks are also used to ensure that no two threads execute the
+same code simultaneously; that is, they implement **mutual exclusion**.     
+Each object on the JVM has a special built-in **monitor lock**, also called the
+**intrinsic lock**.     
+
+A natural consequence is that synchronized statements can be **nested**.
+However, this cause **dead lock**. 
+
+### Deadlocks  
+A **deadlock** is a general situation in which two or more executions wait for
+each other to complete an action before proceeding with their own action.   
+The reason for waiting is that each of the executions obtains an exclusive
+access to a resource that the other execution needs to proceed.  
+
+Establish a **total order between resources** when acquiring them; this ensures
+that no set of threads cyclically wait on the resources they previously
+acquired.
+
+### Guarded blocks  
+A synchronized statement in which some condition is repetitively checked before
+calling wait is called a **guarded block**. We can now use our insight on
+guarded blocks to avoid the **busy-wait** in our worker thread in advance.       
+
+see code in src/main/scala/BasicThreads/SynchronizedPool.
+
+### Interrupting threads and the graceful shutdown  
+Calling the interrupt method on a thread that is in the waiting or timed waiting
+state causes it to throw an InterruptedException. This exception can be caught
+and handled, but in our case it will terminate the Worker thread. However, if we
+call this method while the thread is running, the exception is not thrown and
+the thread's interrupt flag is set. A thread that does not block must
+periodically query the interrupt flag with the isInterrupted method.”
