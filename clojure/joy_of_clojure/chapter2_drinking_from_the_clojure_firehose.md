@@ -125,3 +125,30 @@ appropriate to use #(), it’s likewise appropriate for the fn special form.
     (def sum #(+ %1 %2 %3))
     (sum 1 2 3) 
     => 6
+
+## vars
+
+Using def is the most common way to create Vars in Clojure.
+
+## locals, loops and blocks
+
+### blocks  
+Use the **do** form when you have a series or block of expressions that need to
+be treated as one. All the expressions will be evaluated, but only the last one
+will be returned.
+
+### locals   
+Clojure doesn’t have local variables, but it does have locals; **they just can’t
+vary**. Locals are created and their scope defined using a **let** form, which
+starts with a vector that defines the bindings, followed by any number of
+expressions that make up the body.
+
+    >> 
+    (let [length 10
+             width 5]
+        (* length width)
+     )
+
+### loops    
+The classic way to build a loop in a Lisp is a recursive call, and it’s in
+Clojure as well.
