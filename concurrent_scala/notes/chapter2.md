@@ -106,6 +106,12 @@ A synchronized statement in which some condition is repetitively checked before
 calling wait is called a **guarded block**. We can now use our insight on
 guarded blocks to avoid the **busy-wait** in our worker thread in advance.       
 
+An important property of the wait method is that it can cause **spurious
+wakeups**. Occasionally, the JVM is allowed to wake up a thread that called wait
+even though there is no corresponding notify call. To guard against this, we
+must always use wait in conjunction with **a while loop** that checks the
+condition, as in the previous example.
+
 see code in src/main/scala/BasicThreads/SynchronizedPool.
 
 ### Interrupting threads and the graceful shutdown  
@@ -115,3 +121,18 @@ and handled, but in our case it will terminate the Worker thread. However, if we
 call this method while the thread is running, the exception is not thrown and
 the thread's interrupt flag is set. A thread that does not block must
 periodically query the interrupt flag with the isInterrupted method.”
+
+In the **graceful shutdown**, one thread sets the condition for the termination
+and then calls notify to wake up a worker thread. The worker thread then
+releases all its resources and terminates willingly. 
+
+### Volatile variables  
++   “writes to and reads from volatile variables cannot be reordered in a single
+thread.     
++   Second, writing to a volatile variable is immediately visible to all the
+other threads.
+
+Reads and writes to variables marked as volatile are never reordered. If a write
+W to a volatile v variable is observed on another thread through a read R of the
+same variable, then all the writes that preceded the write W are guaranteed to
+be observed after the read R。
