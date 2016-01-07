@@ -185,6 +185,137 @@ specifically for set membership.
 It is better to have 100 functions operate on one data structure than 10
 functions on 10 data structures.Use built-in data structures first!
 
+### function
+
+#### Function Calls, Macro Calls, and Special Forms
+
+The main feature that makes special forms “special” is that, unlike function
+calls, they don’t always evaluate all of their operands.
+ 
+Another feature that differentiates special forms is that you can’t use them as
+arguments to functions. 
+
+**In general, special forms implement core Clojure functionality that just can’t
+be implemented with functions.** Clojure has only a handful of special forms,
+and it’s pretty amazing that such a rich language is implemented with such
+a small set of building blocks.
+
+Macros are similar to special forms in that they evaluate their operands
+differently from function calls, and they also can’t be passed as arguments to
+functions.
+
+
+
+#### define function    
+
+Function definitions are composed of five main parts:
+
++   defn
++   Function name
++   A docstring describing the function (optional)
++   Parameters listed in brackets
++   Function body
+
+**docstring**
+
+The docstring is a useful way to describe and document your code. You can view
+the docstring for a function in the REPL with (doc fn-name).
+
+
+**arity overloading**   
+  
+Functions also support arity overloading. This means that you can define
+a function so a different function body will run depending on the arity.
+
+    ```
+    (defn greeting
+      ([name] (str "hello:" name))
+      ([] (greeting "world"))
+      )
+    ```
+Clojure also allows you to define **variable-arity** functions by including
+a rest parameter, as in “put the rest of these arguments in a list with the
+following name.” The rest parameter is indicated by an *ampersand* (&), 
+You can mix rest parameters with normal parameters, but the rest parameter has
+to come last.
+
+    ```
+    (defn favorite-things
+      [name & things]
+      (str "hello, " name ", my favorite things are " (clojure.string/join ",
+" things))
+      )
+    ```
+
+**Destructuring**
+
+The basic idea behind destructuring is that it lets you concisely bind names to
+values within a collection. 
+
+You can also destructure maps. You can retain access to the original map
+argument by using the **:as** keyword.
+
+    ```
+    (defn my-first
+      [[first-thing]]
+      first-thing)
+
+    (defn get-location
+      [{lat :lat lng :lng}]
+      (println (str "lat is: " lat))
+      (println (str "lng is: " lng))
+      )
+
+    (defn get-location2
+      [{:keys [lat lng] :as my-location}]
+      (println (str "lat is: " lat))
+      (println (str "lng is: " lng))
+      (println my-location)
+      )
+      ```
+
+**all functions are created equal**     
+Clojure has no privileged functions. + is just a function, - is just a function,
+and inc and map are just functions. They’re no better than the functions you
+define yourself. So don’t let them give you any lip!
+
+#### Anonymous Functions
+
+    ```
+    (fn [param-list]
+      function body)
+
+    #(op % param-list)
+    ```
+    
+    ```
+     ((fn [name] (str "hello, " name)) "world")
+     (#(str "hello, " %) "world")
+    ```
+
+### Others
+
+#### let
+
+let forms have two main uses. First, they provide clarity by allowing you to
+name things. 
+
+Second, they allow you to evaluate an expression only once and reuse the result.
+This is especially important when you need to reuse the result of an expensive
+function call, like a network API call. It’s also important when the expression
+has side effects.
+    
+#### loop
+
+    ```
+    (loop [iteration 0]
+      (println (str "iteration: " iteration))
+      (if (> iteration 3)
+    (println "goodbye")
+    (recur (inc iteration))
+    )
+    )
+    ```
 
 
 > Written with [StackEdit](https://stackedit.io/).
