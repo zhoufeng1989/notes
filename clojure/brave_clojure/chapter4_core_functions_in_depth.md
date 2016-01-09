@@ -61,4 +61,82 @@ as functions, you can do this succinctly.
         {:max 20 :min 1}
         )
        ```
+
+
+### lazy seqs  
+
+Many functions, including map and filter, return a lazy seq. A lazy seq is a seq
+whose members aren’t computed until you try to access them. Computing a seq’s
+members is called **realizing the seq**.
+lazy seq elements need to be realized only once.
+
+Clojure chunks its lazy sequences, which just means that whenever Clojure has to
+realize an element, it preemptively realizes some of the next elements as well.    
+
+#### Infinite sequences
+
+    ```
+    (defn even-numbers
+      ([] (even-numbers 0))
+      ([number] (cons number (lazy-seq (even-numbers (+ number 2)))))
+      )
+      ```
+
+repeat and repeatedly 
+
+### The Collection Abstraction
+
+The collection abstraction is closely related to the sequence abstraction. All
+of Clojure’s core data structures—vectors, maps, lists, and sets—take part in
+both abstractions.
+
+The sequence abstraction is about operating on members individually, whereas the
+collection abstraction is about the data structure as a whole. For example, the
+collection functions count, empty?, and every? aren’t about any individual
+element; they’re about the whole.
+
+#### into and conj
+
+    ```
+    (into {:a :b} [[:c :d] [:e :f]])  ;{:a :b, :c :d, :e :f}
+
+    (conj {:a :b} [[:c :d] [:e :f]])  ;{:a :b, [:c :d] [:e :f]}
+    ```
+
+### function functions
+
++   apply
+
+    apply explodes a **seqable data structure** so it can be passed to
+a function that expects a rest parameter. 
+
+        ```
+        (max 1 2 3)
+        (apply max [1 2 3])
+        ```
++   partial   
+
+partial takes a function and any number of arguments. It then returns a new
+function. When you call the returned function, it calls the original function
+with the original arguments you supplied it along with the new arguments.
+
+    ```
+    (def add10 (partial + 10))
+    (add10 10 10); 30
+    
+    (defn my-partial
+      [partialized-fn & args]
+      (fn [& more-args]
+    (apply partialized-fn (into args more-args))))
+    ```
+    
++   complement
+
+        ```
+        (defn my-complement
+          [func]
+          (fn [& args]
+          (not (apply func args))))
+        ```
+
 > Written with [StackEdit](https://stackedit.io/).
