@@ -64,5 +64,40 @@ designated by macro characters, like ' (the single quote), #, and @.
     (read-string "@var")        ;(clojure.core/deref var)
     (read-string "; ignore!\n(+ 1 2)")   ;(+ 1 2)
     ```
+### Evaluator 
+
+You can think of Clojure’s evaluator as a function that takes a data structure
+as an argument, processes the data structure using rules corresponding to the
+data structure’s type, and returns a result.
+
+evaluator rules 
+  
++   To evaluate a symbol, Clojure looks up what the symbol refers to. 
+    
+    A symbol resolves to either a value or a special form—a built-in Clojure
+operator that provides fundamental behavior.
+    
++   To evaluate a list, Clojure looks at the first element of the list and calls
+a function, macro, or special form. 
+
+    1)  When performing a function call, each operand is fully evaluated and
+then passed to the function as an argument.
+    2)  special forms are special because they implement core behavior that
+can’t be implemented with functions.
+    
++   Any other values (including strings, numbers, and keywords) simply evaluate
+to themselves.
+
+### Macros  
+
+Macros execute in between the reader and the evaluator—so they can manipulate
+the data structures that the reader spits out and transform with those data
+structures before passing them to the evaluator.
+
+The data structure returned by a function is not evaluated, but the data
+structure returned by a macro is. The process of determining the return value of
+a macro is called **macro expansion**, and you can use the function
+```macroexpand``` to see what data structure a macro returns before that data
+structure is evaluated.
 
 > Written with [StackEdit](https://stackedit.io/).
