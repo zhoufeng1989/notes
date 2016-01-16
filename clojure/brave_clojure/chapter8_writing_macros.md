@@ -36,6 +36,63 @@ within the enclosing syntax-quoted data structure.
     `(+ ~@(list 1 2 3))           ;(clojure.core/+ 1 2 3)
     ```
 
+### Things to Watch out for
 
+#### variable capture
+
+Variable capture occurs when a macro introduces a binding that, unknown to the
+macro’s user, eclipses an existing binding.
+
+If you want to introduce let bindings in your macro, you can use a gensym. The
+**gensym** function produces unique symbols on each successive call:
+
+    ```
+        (gensym)
+        (gensym 'prefix)
+    ```
+
+**Auto-gensyms** are more concise and convenient ways to use gensyms.Clojure
+automatically ensures that each instance of x# resolves to the same symbol
+within the same syntax-quoted list.
+
+    ```
+    `(let [name# "Larry Potter"] name#)
+    ```
+
+#### Double Evaluation
+
+    ```
+    (defmacro report
+      [to-try]
+      `(if ~to-try
+     (println (quote ~to-try) "was successful:" ~to-try)
+     (println (quote ~to-try) "was failed:" ~to-try)))
+
+    (report (do (Thread/sleep 1000) (+ 1 1)))
+
+
+    (defmacro report2
+      [to-try]
+      `(let [result# ~to-try]
+     (if result#
+       (println (quote ~to-try) "was successful:" result#)
+       (println (quote ~to-try) "was failed:" result#))))
+
+    (report2 (do (Thread/sleep 1000) (+ 1 1)))
+
+    (defmacro report3
+      [to-try]
+      (let [result (eval to-try)]
+    (println result)
+    `(if ~result
+       (println (quote ~to-try) "was successful:" ~result)
+       (println (quote ~to-try) "was failed:" ~result))))
+
+    (report3 (do (Thread/sleep 1000) (+ 1 1)))
+    ```
+
+When you’re writing macros, it’s important to keep in mind the distinction
+between symbols and values: macros are expanded before code is evaluated and
+therefore don’t have access to the results of evaluation.
 
 > Written with [StackEdit](https://stackedit.io/).
