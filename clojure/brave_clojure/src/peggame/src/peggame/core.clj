@@ -86,6 +86,27 @@
   [board p1 p2]
   (place-peg (remove-peg board p1) p2))
 
+(defn valid-moves
+  [board pos]
+  (into {}
+        (filter (fn [[dest jumped]]
+                  (and (not (pegged? board dest))
+                       (pegged? board jumped)))
+                (get-in board [pos :connection]))))
+
+(defn valid-move?
+  [board p1 p2]
+  (get (valid-moves board p1) p2))
+
+(defn make-move
+  [board p1 p2]
+  (if-let [jumped (valid-move? board p1 p2)]
+    (move-peg (remove-peg board jumped) p1 p2)))
+
+(defn can-move?
+  [board]
+  (some (comp not-empty (partial valid-moves board))
+    (map first (filter #(get (second %) :pegged) board))))
 
 
 (defn -main
