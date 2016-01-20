@@ -66,7 +66,7 @@
   [rows]
   (let [initial-board {:rows rows}
         max-pos (row-tri rows)]
-    (reduce (fn [new-board pos] (println new-board) (add-pos new-board max-pos pos))
+    (reduce (fn [new-board pos] (add-pos new-board max-pos pos))
             initial-board
             (range 1 (inc max-pos)))))
 
@@ -108,10 +108,54 @@
   (some (comp not-empty (partial valid-moves board))
     (map first (filter #(get (second %) :pegged) board))))
 
+(def alpha-start 97)
+(def alpha-end 123)
+(def letters (map (comp str char) (range alpha-start alpha-end)))
+(def pos-chars 3)
+
+(defn render-pos
+  [board pos]
+  (str (nth letters (dec pos))
+       (if (get-in board [pos :pegged])
+         "0" 
+         "-")
+       ))
+(defn row-positions
+  [row-num]
+  (range (inc (or (row-tri (dec row-num)) 0))
+         (inc (row-tri row-num))))
+(defn row-padding
+  [row-num rows]
+  (let [pad-length (/ (* (- rows row-num) pos-chars) 2)]
+    (apply str (take pad-length (repeat " ")))))
+(defn render-row
+  [board row-num]
+  (str (row-padding row-num (:rows board))
+       (clojure.string/join " " (map (partial render-pos board) (row-positions row-num)))))
+(defn print-board
+  [board]
+  (doseq [row-num (range 1 (inc (:rows board)))]
+    (println (render-row board row-num))))
+
+(defn letter->pos
+  [letter]
+  (inc (- (int (first letter)) alpha-start)))
+
+(defn get-input
+  ([] (get-input nil))
+  ([default]
+   (let [input (clojure.string/trim (read-line))]
+     (if (empty? input)
+       default
+       (clojure.string/lower-case input)))))
+
+(defn characters-as-strings
+  [string]
+  )
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println (new-board 5))
+  (print-board (new-board 6))
   )
   
