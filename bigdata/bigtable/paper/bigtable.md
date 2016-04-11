@@ -123,8 +123,88 @@ Initially, each table consists of just one tablet. As a table grows, it is
 automatically split into multiple tablets, each approximately 100-200 MB in size
 by default.
 
-### tablet location.
+### tablet location
+
+![tablet location hierachy](tablet_location_hierarchy.png)
 
 We use a three-level hierarchy analogous to that of a B+ tree to store tablet
-location information
+location information.
+
+The first level is a file stored in Chubby that contains the location of the
+root tablet. 
+
+The METADATA table stores the location of a tablet under a row key that is an
+encoding of the tablet’s table identifier and its end row.
+
+### tablet assignment 
+
+Each tablet is assigned to one tablet server at a time. The master keeps track
+of the set of live tablet servers, and the current assignment of tablets to
+tablet servers, including
+which tablets are unassigned. When a tablet is unassigned, and a tablet server
+with sufficient room for the tablet is available, the master assigns the tablet
+by sending a tablet load request to the tablet server.
+
+(1) The master grabs a unique master lock in Chubby, which prevents concurrent
+master instantiations.   
+(2) The master scans the servers directory in Chubby to find the live servers.  
+(3) The master communicates with every live tablet server to discover what
+tablets are already assigned to each server. 
+(4) The master scans the METADATA table to learn the set of tablets. Whenever
+this scan encounters a tablet that is not already assigned, the master adds the
+tablet to the set of unassigned tablets, which makes the tablet eligible for
+tablet assignment.
+
+### tablet serving  
+![tablet representation](tablet_representation.png)
+
+Write: commit log(redo log) and memtable
+Read: merge view of memtable and sstable
+
+### compaction
+When the memtable size reaches a threshold, the memtable is frozen, a new
+memtable is created, and the frozen memtable is converted to an SSTable and
+written to GFS. 
+This **minor compaction** process has two goals:
+
++   it shrinks the memory usage of the tablet server
++   it reduces the amount of data that has to be read from the commit log during
+recovery if this server dies.
+
+A **merging compaction** reads the contents of a few SSTables and the memtable,
+and writes out a new SSTable. The input SSTables and memtable can be discarded
+as soon as the compaction has finished.
+
+A merging compaction that rewrites all SSTables into exactly one SSTable is
+called a **major compaction**. SSTables produced by non-major compactions can
+contain special deletion entries that suppress deleted data in older SSTables
+that are still live. A major compaction,
+on the other hand, produces an SSTable that contains **no deletion information
+or deleted data**.
+
+## Refinements
+### locality groups
+Clients can group multiple column families together into a locality group.
+A separate SSTable is generated for each locality group in each tablet.
+Segregating column families that are not typically accessed together into
+separate locality groups enables more efficient reads
+
+### compaction
+Client can control whether sstables are compacted and which compression format
+is used. The user-specified compression
+format is applied to each SSTable block, Although we lose some space by
+compressing each block separately, we benefit in that small portions of an
+SSTable can be read without decompressing
+the entire file. 
+
+### bloom filter
+We reduce the number of accesses by allowing clients to specify that Bloom
+filters should be created for SSTables in a particular
+locality group. A Bloom filter allows us to ask whether an SSTable might contain
+any data for a specified row/column pair.
+
+### commit log
+append mutations to a single commit log per tablet server, co-mingling mutations
+for different tablets in the same physical log
+file.
 > Written with [StackEdit](https://stackedit.io/).
