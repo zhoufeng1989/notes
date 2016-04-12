@@ -78,6 +78,21 @@ echo ${path%/*}
 echo -e ${PATH//:/'\n'}
 ```
 
++	其他操作
+
+1) 获取字串
+
+```${variable_name:start:length}```
+
+```
+x="hello, world"
+echo ${x:2:4}
+```
+
+2) 字符串长度
+
+``` ${#string} ```
+
 **变量类型**
 
 declare命令
