@@ -125,7 +125,7 @@ by default.
 
 ### tablet location
 
-![tablet location hierachy](tablet_location_hierarchy.png)
+![tablet location hierachy](bigtable/tablet_location_hierarchy.png)
 
 We use a three-level hierarchy analogous to that of a B+ tree to store tablet
 location information.
@@ -156,7 +156,7 @@ tablet to the set of unassigned tablets, which makes the tablet eligible for
 tablet assignment.
 
 ### tablet serving  
-![tablet representation](tablet_representation.png)
+![tablet representation](bigtable/tablet_representation.png)
 
 Write: commit log(redo log) and memtable
 Read: merge view of memtable and sstable
