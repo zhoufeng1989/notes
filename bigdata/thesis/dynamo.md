@@ -1,4 +1,4 @@
-ckground
+## background
 
 ### System Assumptions and Requirements 
 **Query Model**  
@@ -81,5 +81,46 @@ techniques over centralized control.
 ### Heterogeneity
 The system needs to be able to exploit heterogeneity in the infrastructure it
 runs on. 
+
+## System Architecture
+### Partitioning Algorithm 
+Dynamo’s partitioning scheme relies on consistent hashing to distribute the load
+across multiple storage hosts. The principle
+advantage of consistent hashing is that departure or arrival of a
+node only affects its immediate neighbors and other nodes remain
+unaffected.
+
+Dynamo uses a variant of consistent hashing : instead of mapping a node to
+a single point in the circle, each node gets assigned to multiple points in the
+ring. To this end, Dynamo uses the concept of “virtual nodes”. A virtual node
+looks like a single node in the system, but each node can be responsible for
+more than one virtual node. 
+
+Using virtual nodes has the following advantages:
+
++   If a node becomes unavailable (due to failures or routine
+maintenance), the load handled by this node is evenly dispersed across the
+remaining available nodes.
++   When a node becomes available again, or a new node is added to the system,
+the newly available node accepts a roughly equivalent amount of load from each
+of the other available nodes.
++   The number of virtual nodes that a node is responsible can
+decided based on its capacity, accounting for heterogeneity
+in the physical infrastructure. 
+
+### Replication
+To achieve high availability and durability, Dynamo replicates its
+data on multiple hosts.  Each key, k, is assigned to a coordinator node.The
+coordinator is in charge of the replication of the data items
+that fall within its range. In addition to locally storing each key
+within its range, the coordinator replicates these keys at the N-1
+clockwise successor nodes in the ring. 
+
+The list of nodes that is responsible for storing a particular key is
+called the preference list. To account for node failures, preference list
+contains more than N nodes.
+
+### Data Versioning
+
 
 > Written with [StackEdit](https://stackedit.io/).
