@@ -120,7 +120,50 @@ The list of nodes that is responsible for storing a particular key is
 called the preference list. To account for node failures, preference list
 contains more than N nodes.
 
-### Data Versioning
+### Data Versioning  
+Dynamo treats the result of each modification as a new and immutable version of
+the data. It allows for multiple versions of an object to be present in the
+system at the same time. Most of the time, new versions subsume the previous
+version(s), and the system itself can determine the authoritative version
+(syntactic reconciliation).
+However, version branching may happen, in the presence of failures combined with
+concurrent updates, resulting in conflicting versions of an object. In these
+cases, the system cannot reconcile the multiple versions of the same object and
+the client must perform the reconciliation in order to collapse multiple
+branches of data evolution back into one (semantic reconciliation). 
 
+Dynamo uses **vector clocks** in order to capture causality between different
+versions of the same object. A vector clock is effectively a list of (node,
+counter) pairs. One vector clock is associated with every version of every
+object. One can determine whether two versions of an object are on parallel
+branches or have a causal ordering, by examine their vector clocks. If the
+counters on the first object’s clock are less-than-or-equal to all of the nodes
+in the second clock, then the first is an ancestor of the second and can be
+forgotten. Otherwise, the two changes are considered to be in conflict and
+require reconciliation. 
 
+### Execution of get () and put () operations 
+To maintain consistency among its replicas, Dynamo uses a consistency protocol
+similar to those used in quorum systems. This protocol has two key configurable
+values: R and W. R is the minimum number of nodes that must participate in
+a successful read operation. W is the minimum number of nodes that must
+participate in a successful write operation. Setting R and W such that
+R + W > N yields a quorum-like system. In this model, the latency of a get (or
+put) operation is dictated by the slowest of the R (or W) replicas. For this
+reason, R and W are usually configured to be less than N, to provide better
+latency. 
+
+Upon receiving a put() request for a key, the coordinator generates the vector
+clock for the new version and writes the new version locally. The coordinator
+then sends the new version (along with the new vector clock) to the
+N highest-ranked reachable nodes. If at least W-1 nodes respond then the write
+is considered successful. 
+
+Similarly, for a get() request, the coordinator requests all existing versions
+of data for that key from the N highest-ranked reachable nodes in the preference
+list for that key, and then waits for R responses before returning the result to
+the client. If the coordinator ends up gathering multiple versions of the data,
+it returns all the versions it deems to be causally unrelated. The divergent
+versions are then reconciled and the reconciled version superseding the current
+versions is written back. 
 > Written with [StackEdit](https://stackedit.io/).
