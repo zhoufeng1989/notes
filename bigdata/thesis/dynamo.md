@@ -215,4 +215,8 @@ logical partitions are highly unlikely.
 Decentralized failure detection protocols use a simple gossip-style
 protocol that enable each node in the system to learn about the
 arrival (or departure) of other nodes.
+
+## Implementation
+In Dynamo, each storage node has three main software components: request
+coordination, membership and failure detection, and a local persistence engine. 
 > Written with [StackEdit](https://stackedit.io/).
