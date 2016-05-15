@@ -24,7 +24,7 @@ HDFS's unit is blocks,like in a filesystem for a single disk, files in HDFS are 
 
 #### Why HDFS get large block than file system.
 
-HDFS blocks are large compared to disk blocks, and the reason is to minimize the cost of seeks. If the block is large enough, the time it takes to transfer the data from the disk can be significantly longer than the time to seek to the start of the block. Thus, transferring a large file made of multiple blocks operates at the disk transfer rate.
+HDFS blocks are large compared to disk blocks(default is 128MB), and the reason is to minimize the cost of seeks. If the block is large enough, the time it takes to transfer the data from the disk can be significantly longer than the time to seek to the start of the block. Thus, transferring a large file made of multiple blocks operates at the disk transfer rate.
 
 #### Advantages to have the block abstraction.
 
