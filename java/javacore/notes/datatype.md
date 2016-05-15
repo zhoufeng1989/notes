@@ -21,6 +21,7 @@ float类型有后缀F,没有后缀的默认为double类型
 ### char类型
 
 char类型用于表示单个字符,在Java中,char类型用UTF-16编码描述一个代码单元.
+http://stackoverflow.com/questions/8061982/how-to-put-a-supplementary-unicode-character-in-a-string-literal
 
 ### 布尔类型
 
@@ -50,3 +51,7 @@ String类没有提供修改字符串的方法,String类对象也被称为不可�
 ```
 if (str != null && str.length() != 0) {...}
 ```
+
+### 控制流程
+
+for, continue with label
