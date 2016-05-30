@@ -37,4 +37,32 @@ Java总是按值传递,即方法得到的是所有参数值的一个拷贝,方�
 **抽象类** 
 抽象类不能被实例化
 
-**object 的 equals 与 hash_code** 
+**Object 的 equals 与 hash_code**  
+Object类中的equals方法用于检测一个对象是否等于另一个对象,在Object类中,这个方法将判断两个对象是否具有相同的引用.然而,经常需要检测两个对象
+状态的相等性,如果两个对象状态相等,那么这两个对象就是相等的,这就需要重写equals方法.  
+如果x.equals(y)返回true, x.hashCode() 必须等于 y.hashCode().
+
+**对象包装器与自动拆装箱**  
+所有的基本类型都有与之对应的类,这些类被称作包装器.包装器类是不可变的,而且不可被继承(final) 
+
+**可变参数**  
+main方法也可被写成 ```public static void main(String... args)```
+
+**反射** 
+
+Class 类. Java 运行时系统为所有对象维护一个运行时的类型标识,这个信息跟踪每个对象的所属类.可以通过Class类访问这些信息,Object类的getClass方法返回Class对象.
+三种方法得到对应的Class对象:  
++   instance.getClass
++   classname.class
++   Class.forName
+
+**interface**  
+
+an **interface** is not a class but a set of requirements for the classes that want to conform to the interface.   
+All methods of an interface are automatically public.
+
+You can use ```instanceof``` to check whether an object implements an interface: ```if (anObject instanceof Comparale)```
+
+**clone** 
+If subobject is mutable, you must redefine the clone method to make a deep copy that clones the subobjects as well. 
+The ```clone``` method is declared protected in the ```Object``` class, so you have to implements Cloneable interface. 
