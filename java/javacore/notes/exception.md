@@ -25,4 +25,55 @@ of declaring the exception, you can also catch it. Then the exception won't be t
 specification is necessary. 
 
 If you override a method from a superclass, the checked exceptions that the subclass method declares cannot be more general 
-than those of 
+than those of the superclass method.(It is OK to throw more specific exceptions or not to throw any exceptions in the 
+subclass method.) If the superclass method throws no checked exception at all, neither can the subclass.
+
+### throws an exception
+
+```throw new ExceptionClass()``` or ```throw new ExceptionClass(msg)```
+
+If you want to change the exception type, rethrow it in catch block. It is a good practise to set original exception as 
+the "cause" of the new exception: 
+
+    ```
+    try {
+        access the database
+    }
+    catch (SQLException e) {
+        Throwable se = new ServletException("database error");
+        // The original exception can be retrieved as: se.getCause();
+        se.initCause(e);
+        throw se;
+    }
+    ```
+    
+### finally  
+a finally clause can yield unexpected results when it contains return statement or throws an exception.  
+    ```
+    try {
+        ....
+        // If finally return a value, return in try statement will be ignored.
+        return 10;
+    }
+    catch (Exception e) {
+        //If finally throw an exception, the exception in catch is ignored.
+        throw e;
+    }
+    finally {
+        io.close();
+        //return 100;
+    }
+    ```
+
+### Try-with-Resources Statement 
+Provided the resource belongs to a class that implements the ```AutoCloseable``` interface, when the try block exists, 
+the resource.close() is called automatically. This handles the difficulty when the try block throws an exception and the 
+close method also throws an exception. 
+
+### Stack Trace 
+You can acess the text description of a stack trace by calling the ```printStackTrace``` method of the Throwable class. 
+```getStackTrace``` method yields an array of StackTraceElement objects
+
+### Assertion  
+enable assertions ```java -enableassertions MyApp```  
+
