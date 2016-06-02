@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Created by zhoufeng on 16/5/24.
  */
-public class Employee {
+public class Employee implements Comparable<Employee> {
     private String name;
     private double salary;
 
@@ -16,10 +16,6 @@ public class Employee {
 
     public double getSalary() {
         return salary;
-    }
-
-    public String toString() {
-        return "Employee: name: " + name + ", salary: " + salary;
     }
 
     public void increaseSalary(double x) {
@@ -38,9 +34,21 @@ public class Employee {
         return Objects.hash(name, salary);
     }
 
+    public String toString() {
+        return getClass().getName() + "[name=" + name + ",salary=" + salary + "]";
+    }
+
+    public int compareTo(Employee other) {
+        return Double.compare(this.salary, other.salary);
+    }
+
+    public Employee clone() throws CloneNotSupportedException {
+        return (Employee) super.clone();
+    }
+
 }
 
-class Manager extends Employee {
+class Manager extends Employee implements Cloneable {
     private double bonus;
 
     public Manager(String name, double salary, double bonus) {
@@ -58,4 +66,19 @@ class Manager extends Employee {
         return super.hashCode() + Objects.hash(bonus);
     }
 
+    public String toString() {
+        return super.toString() + "[bonus=" + bonus + "]";
+    }
+
+    public int compareTo(Employee other) {
+        if (other.getClass() != this.getClass()) {
+            return 1;
+        }
+        Manager manager = (Manager)other;
+        return Double.compare(this.getSalary() + this.bonus, manager.getSalary() + manager.bonus);
+    }
+
+    public Manager clone() throws CloneNotSupportedException {
+        return (Manager) super.clone();
+    }
 }
