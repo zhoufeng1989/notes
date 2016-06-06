@@ -59,3 +59,40 @@ By default, a block is cached in only one datanode’s memory, although the numb
 HDFS federation, introduced in the 2.x release series, allows a cluster to scale by adding namenodes, each of which manages a portion of the filesystem namespace. For example, one namenode might manage all the files rooted under /user, say, and a second namenode might handle files under /share.
 
 Under federation, each namenode manages a namespace volume, which is made up of the metadata for the namespace, and a block pool containing all the blocks for the files in the namespace.
+
+### HDFS High Availability  
+When the active namenode fails, the new namenode is not able to serve requests until it has:  
+
++	loaded its namespace image into memory;
++	replayed its edit log;
++	received enough block reports from the datanodes to leave safe mode.
+
+Hadoop 2 remedied this situation by adding support for **HDFS high availability (HA)**. 
+In this implementation, there are a pair of namenodes in an active-standby configuration. 
+In the event of the failure of the active namenode, the standby takes over its duties 
+to continue servicing client requests without a significant interruption.
+
+A few architectural changes are needed to allow this to happen:
+
++	The namenodes must use highly available shared storage to share the edit log.   
+There are two choices for the highly available shared storage: 
+an NFS filer, or a quorum journal manager (QJM).
+
++	Datanodes must send block reports to both namenodes because the block mappings are stored in a namenode’s memory, 
+	and not on disk.
++	Clients must be configured to handle namenode failover, using a mechanism that is transparent to users
++	The secondary namenode’s role is subsumed by the standby, which takes periodic checkpoints of 
+	the active namenode’s namespace.
+
+#### fencing  
+In the case of an ungraceful failover, however, it is impossible to be sure that 
+the failed namenode has stopped running.   
+For example, a slow network or a network partition can trigger a failover transition, 
+even though the previously active namenode is still running and thinks it is 
+still the active namenode.    
+The HA implementation goes to great lengths to ensure that the previously active namenode 
+is prevented from doing any damage and causing corruption — a method known as fencing.
+
+The QJM only allows one namenode to write to the edit log at one time; 
+however, it is still possible for the previously active namenode to serve stale 
+read requests to clients, so setting up an SSH fencing command that will kill the namenode’s process is a good idea.
